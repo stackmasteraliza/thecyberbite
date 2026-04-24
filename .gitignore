@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# claude local overrides
+CLAUDE.local.md
+AGENTS.md
+.claude/settings.local.json
+.claude/**/*.md
