@@ -8,44 +8,44 @@ const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 const services = [
   {
-    id: "threat-hunting",
+    id: "pentest",
     index: "01",
     tag: "CORE SERVICE",
-    title: "24/7 Threat Monitoring",
+    title: "Penetration Testing",
     description:
-      "Our team watches your systems around the clock — your devices, cloud storage, and network traffic. Instead of waiting for something to go wrong, we actively search for warning signs. We catch threats that automated tools overlook, before they turn into real problems.",
-    metric: "< 4 hr",
-    metricLabel: "AVERAGE TIME TO DETECT",
+      "We simulate real attacks on your website, app, or network to find security holes before hackers do. You get a clear report of every weakness found and exactly how to fix it.",
+    metric: "Web & Network",
+    metricLabel: "SECURITY AUDITS",
   },
   {
-    id: "vulnerability",
+    id: "reverse",
     index: "02",
     tag: "CORE SERVICE",
-    title: "Security Weak Spot Check",
+    title: "Reverse Engineering",
     description:
-      "Every weakness in your systems is an open door for hackers — even if no one has walked through it yet. We scan your website, apps, internal network, and cloud setup to find those gaps and report them to you clearly, before anyone else does.",
-    metric: "100%",
-    metricLabel: "OF YOUR SYSTEMS CHECKED",
+      "We take apart software, apps, and APK files to understand how they work under the hood — finding hidden vulnerabilities, malware, or suspicious behaviour that's not visible on the surface.",
+    metric: "Binary & APK",
+    metricLabel: "ANALYSIS",
   },
   {
-    id: "incident-response",
+    id: "secdev",
     index: "03",
     tag: "CORE SERVICE",
-    title: "Emergency Response & Recovery",
+    title: "Secure Project Development",
     description:
-      "If you've been hacked or something suspicious is happening, we step in immediately — online or in person. We stop the attack, figure out what happened, secure your systems, and get you back up and running safely as fast as possible.",
-    metric: "60 min",
-    metricLabel: "RESPONSE TIME GUARANTEE",
+      "We build software and systems with security baked in from the start — including proper encryption, safe data handling, and protection against common attacks. No security bolted on as an afterthought.",
+    metric: "Crypto-first",
+    metricLabel: "DEVELOPMENT",
   },
   {
-    id: "compliance",
+    id: "docs",
     index: "04",
-    tag: "COMPLIANCE",
-    title: "Compliance Made Simple",
+    tag: "CORE SERVICE",
+    title: "Project Documentation",
     description:
-      "Security rules and certifications like SOC 2, GDPR, and ISO 27001 can feel overwhelming. We handle the heavy lifting — setting up the right protections, preparing your paperwork, and making sure you pass your audit without the last-minute stress.",
-    metric: "3",
-    metricLabel: "MAJOR STANDARDS COVERED",
+      "We write clear, complete technical documentation for your security projects — from architecture overviews to step-by-step guides — so your team always knows how the system works and how to keep it secure.",
+    metric: "Full Coverage",
+    metricLabel: "DOCUMENTATION",
   },
 ];
 
