@@ -17,8 +17,8 @@ const members = [
     bio: "Tousif Ahmed is a cybersecurity specialist with expertise in penetration testing, reverse engineering, and defensive security. He identifies critical vulnerabilities, analyzes complex systems, and delivers secure solutions to protect modern applications and infrastructures.",
     skills: ["PENTESTING", "REVERSE ENG", "VULNERABILITY RESEARCH", "DEFENSE"],
     social: {
-      github: null as string | null,
-      linkedin: null as string | null,
+      github: "https://github.com/tousifahmed101-0xT" as string | null,
+      linkedin: "https://www.linkedin.com/in/tousif-ahmed-0xt" as string | null,
     },
   },
   {
