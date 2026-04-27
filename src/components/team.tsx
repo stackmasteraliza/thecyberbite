@@ -8,44 +8,34 @@ const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 const members = [
   {
-    id: "member-1",
+    id: "tousif",
     index: "01",
-    initials: "AA",
-    name: "Team Member One",
-    role: "Co-Founder & Editor",
-    tag: "EDITORIAL",
-    bio: "Placeholder bio for the first team member. Update with real details.",
-    skills: ["THREAT INTEL", "REPORTING", "RESEARCH", "ANALYSIS"],
+    initials: "TA",
+    name: "Tousif Ahmed",
+    role: "Penetration Tester | Reverse Engineer | Security Consultant",
+    tag: "CONSULTANT",
+    bio: "Tousif Ahmed is a cybersecurity specialist with expertise in penetration testing, reverse engineering, and defensive security. He identifies critical vulnerabilities, analyzes complex systems, and delivers secure solutions to protect modern applications and infrastructures.",
+    skills: ["PENTESTING", "REVERSE ENG", "VULNERABILITY RESEARCH", "DEFENSE"],
     social: {
-      twitter: "https://twitter.com/",
-      linkedin: "https://linkedin.com/in/",
-      github: "https://github.com/",
+      github: null as string | null,
+      linkedin: null as string | null,
     },
   },
   {
-    id: "member-2",
+    id: "asim",
     index: "02",
-    initials: "BB",
-    name: "Team Member Two",
-    role: "Co-Founder & Technical Lead",
-    tag: "TECHNICAL",
-    bio: "Placeholder bio for the second team member. Update with real details.",
-    skills: ["PENTESTING", "MALWARE ANALYSIS", "OSINT", "CTF"],
+    initials: "MA",
+    name: "Muhammad Asim Ali",
+    role: "Penetration Tester | Reverse Engineer | Security Analyst",
+    tag: "ANALYST",
+    bio: "Muhammad Asim Ali is a cybersecurity professional specializing in penetration testing, reverse engineering, and cyber defense. He focuses on uncovering security flaws, strengthening system resilience, and building reliable, secure digital solutions.",
+    skills: ["PENTESTING", "REVERSE ENG", "CYBER DEFENSE", "SECURITY ANALYSIS"],
     social: {
-      twitter: "https://twitter.com/",
-      linkedin: "https://linkedin.com/in/",
-      github: "https://github.com/",
+      github: "https://github.com/m-asim-ali" as string | null,
+      linkedin: "https://www.linkedin.com/in/muhammad-asim-ali-528118353" as string | null,
     },
   },
 ];
-
-function IconX() {
-  return (
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z" />
-    </svg>
-  );
-}
 
 function IconLinkedIn() {
   return (
@@ -66,16 +56,16 @@ function IconGitHub() {
 function SocialLinks({ social, hov }: { social: typeof members[0]["social"]; hov: boolean }) {
   return (
     <div className="flex items-center gap-3 mt-1">
-      {social.twitter && (
+      {social.github && (
         <a
-          href={social.twitter}
+          href={social.github}
           target="_blank"
           rel="noopener noreferrer"
           className="transition-colors duration-200"
           style={{ color: hov ? "rgba(255,255,255,0.5)" : "rgba(255,255,255,0.2)" }}
-          aria-label="X / Twitter"
+          aria-label="GitHub"
         >
-          <IconX />
+          <IconGitHub />
         </a>
       )}
       {social.linkedin && (
@@ -88,18 +78,6 @@ function SocialLinks({ social, hov }: { social: typeof members[0]["social"]; hov
           aria-label="LinkedIn"
         >
           <IconLinkedIn />
-        </a>
-      )}
-      {social.github && (
-        <a
-          href={social.github}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="transition-colors duration-200"
-          style={{ color: hov ? "rgba(255,255,255,0.5)" : "rgba(255,255,255,0.2)" }}
-          aria-label="GitHub"
-        >
-          <IconGitHub />
         </a>
       )}
     </div>
