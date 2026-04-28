@@ -5,10 +5,10 @@ import { useRef, useState } from "react";
 import { SplitText } from "@/components/split-text";
 
 const services = [
-  "SECURITY AUDIT",
-  "THREAT HUNTING",
-  "INCIDENT RESPONSE",
-  "COMPLIANCE PROGRAM",
+  "PENETRATION TESTING",
+  "REVERSE ENGINEERING",
+  "SECURE DEVELOPMENT",
+  "PROJECT DOCUMENTATION",
 ];
 
 function ServiceSelect({
@@ -127,18 +127,19 @@ function StatCard({ value, unit, label, delay }: { value: string; unit: string; 
 }
 
 /* ── Submit button ──────────────────────────────────────────────── */
-function SubmitBtn() {
+function SubmitBtn({ sending }: { sending: boolean }) {
   const [hov, setHov] = useState(false);
   return (
     <motion.button
       type="submit"
+      disabled={sending}
       className="relative overflow-hidden py-4 text-[12px] font-bold tracking-widest uppercase cursor-none border"
-      style={{ fontFamily: "var(--mono)" }}
-      onHoverStart={() => setHov(true)}
+      style={{ fontFamily: "var(--mono)", opacity: sending ? 0.6 : 1 }}
+      onHoverStart={() => !sending && setHov(true)}
       onHoverEnd={() => setHov(false)}
       animate={{ borderColor: hov ? "rgba(255,255,255,1)" : "rgba(255,255,255,0)" }}
       transition={{ duration: 0.3 }}
-      whileTap={{ scale: 0.98 }}
+      whileTap={{ scale: sending ? 1 : 0.98 }}
     >
       <motion.span className="absolute inset-0 bg-white" animate={{ opacity: hov ? 0.92 : 1 }} />
       <motion.span
@@ -148,17 +149,50 @@ function SubmitBtn() {
         transition={{ duration: 0.35, ease: EASE }}
       />
       <span className="relative" style={{ color: hov ? "#fff" : "#000", transition: "color 0.35s" }}>
-        <SplitText text="REQUEST CONSULTATION →" hovered={hov} stagger={0.016} />
+        <SplitText text={sending ? "SENDING..." : "REQUEST CONSULTATION →"} hovered={hov} stagger={0.016} />
       </span>
     </motion.button>
   );
 }
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /* ── Main component ─────────────────────────────────────────────── */
 export function ClosingCta() {
   const sectionRef = useRef(null);
   const inView = useInView(sectionRef, { once: true, margin: "-80px" });
   const [selectedService, setSelectedService] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setEmailError("");
+
+    if (!EMAIL_RE.test(email)) {
+      setEmailError("Please enter a valid email address.");
+      return;
+    }
+
+    setStatus("sending");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, service: selectedService, message }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Unknown error");
+      setStatus("success");
+    } catch (err) {
+      setErrorMsg(err instanceof Error ? err.message : "Something went wrong.");
+      setStatus("error");
+    }
+  }
 
   return (
     <section id="audit" ref={sectionRef} className="py-0 bg-black overflow-hidden">
@@ -289,7 +323,7 @@ export function ClosingCta() {
               animate={inView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.7, ease: EASE, delay: 0.3 }}
               className="flex flex-col border border-white/10 bg-[#030303]"
-              onSubmit={(e) => e.preventDefault()}
+              onSubmit={handleSubmit}
             >
               {/* Form title bar */}
               <div className="flex items-center gap-2 px-4 py-2.5 border-b border-white/10 bg-[#080808]">
@@ -304,34 +338,66 @@ export function ClosingCta() {
                 </span>
               </div>
 
-              <input
-                type="text"
-                placeholder="YOUR NAME"
-                required
-                className="bg-transparent border-b border-white/10 text-white placeholder-white/20 px-5 py-4 text-[12px] outline-none focus:bg-white/[0.02] transition-colors"
-                style={{ fontFamily: "var(--mono)" }}
-              />
-              <input
-                type="email"
-                placeholder="WORK EMAIL"
-                required
-                className="bg-transparent border-b border-white/10 text-white placeholder-white/20 px-5 py-4 text-[12px] outline-none focus:bg-white/[0.02] transition-colors"
-                style={{ fontFamily: "var(--mono)" }}
-              />
-              <ServiceSelect value={selectedService} onChange={setSelectedService} />
-              <textarea
-                placeholder="BRIEF DESCRIPTION (OPTIONAL)"
-                rows={3}
-                className="bg-transparent border-b border-white/10 text-white placeholder-white/20 px-5 py-4 text-[12px] outline-none focus:bg-white/[0.02] transition-colors resize-none"
-                style={{ fontFamily: "var(--mono)" }}
-              />
-              <SubmitBtn />
-              <p
-                className="text-[9px] text-white/15 text-center py-3 tracking-[0.2em] uppercase"
-                style={{ fontFamily: "var(--mono)" }}
-              >
-                ACTIVE INCIDENT? CALL OUR 24/7 LINE
-              </p>
+              {status === "success" ? (
+                <div className="flex flex-col items-center justify-center gap-3 px-8 py-14 text-center">
+                  <span className="text-[28px]" aria-hidden>✓</span>
+                  <p className="text-[13px] text-white font-bold tracking-wide" style={{ fontFamily: "var(--mono)" }}>
+                    MESSAGE SENT
+                  </p>
+                  <p className="text-[11px] text-white/40" style={{ fontFamily: "var(--sans)" }}>
+                    We&apos;ll get back to you within 24 hours.
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <input
+                    type="text"
+                    placeholder="YOUR NAME"
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="bg-transparent border-b border-white/10 text-white placeholder-white/20 px-5 py-4 text-[12px] outline-none focus:bg-white/[0.02] transition-colors"
+                    style={{ fontFamily: "var(--mono)" }}
+                  />
+                  <div className="flex flex-col">
+                    <input
+                      type="email"
+                      placeholder="YOUR EMAIL"
+                      required
+                      value={email}
+                      onChange={(e) => { setEmail(e.target.value); setEmailError(""); }}
+                      className="bg-transparent border-b border-white/10 text-white placeholder-white/20 px-5 py-4 text-[12px] outline-none focus:bg-white/[0.02] transition-colors"
+                      style={{ fontFamily: "var(--mono)", borderColor: emailError ? "rgba(255,80,80,0.4)" : undefined }}
+                    />
+                    {emailError && (
+                      <span className="px-5 py-1.5 text-[10px] text-red-400" style={{ fontFamily: "var(--mono)" }}>
+                        {emailError}
+                      </span>
+                    )}
+                  </div>
+                  <ServiceSelect value={selectedService} onChange={setSelectedService} />
+                  <textarea
+                    placeholder="BRIEF DESCRIPTION (OPTIONAL)"
+                    rows={3}
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    className="bg-transparent border-b border-white/10 text-white placeholder-white/20 px-5 py-4 text-[12px] outline-none focus:bg-white/[0.02] transition-colors resize-none"
+                    style={{ fontFamily: "var(--mono)" }}
+                  />
+                  <SubmitBtn sending={status === "sending"} />
+                  {status === "error" && (
+                    <p className="text-[10px] text-red-400 text-center py-2 px-5" style={{ fontFamily: "var(--mono)" }}>
+                      {errorMsg}
+                    </p>
+                  )}
+                  <p
+                    className="text-[9px] text-white/15 text-center py-3 tracking-[0.2em] uppercase"
+                    style={{ fontFamily: "var(--mono)" }}
+                  >
+                    RESPONSE WITHIN 24 HOURS
+                  </p>
+                </>
+              )}
             </motion.form>
           </div>
         </div>
