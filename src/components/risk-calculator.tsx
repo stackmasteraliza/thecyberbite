@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SplitText } from "@/components/split-text";
 
@@ -140,7 +140,7 @@ function OptionBtn({
   );
 }
 
-function RunBtn({ onClick }: { onClick: () => void }) {
+function RunBtn({ onClick }: { onClick: () => void; }) {
   const [hov, setHov] = useState(false);
   return (
     <motion.button
@@ -177,12 +177,18 @@ function RunBtn({ onClick }: { onClick: () => void }) {
 export function RiskCalculator() {
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [submitted, setSubmitted] = useState(false);
+  const scorePanelRef = useRef<HTMLDivElement>(null);
 
   const maxScore = factors.reduce((a, f) => a + Math.max(...f.options.map((o) => o.score)), 0);
   const totalScore = Object.values(answers).reduce((a, b) => a + b, 0);
   const answered = Object.keys(answers).length;
   const band = getBand(totalScore, maxScore);
   const scoreNum = Math.round((totalScore / maxScore) * 100);
+
+  function handleSubmit() {
+    setSubmitted(true);
+    scorePanelRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 
   return (
     <section id="risk" className="border-b border-white/10 py-24 bg-[#030303]">
@@ -200,7 +206,7 @@ export function RiskCalculator() {
 
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           {/* Left — score panel */}
-          <div className="lg:sticky lg:top-20">
+          <div ref={scorePanelRef} className="lg:sticky lg:top-20">
             <h2
               className="text-[clamp(28px,4vw,48px)] font-bold text-white leading-tight tracking-tight"
               style={{ fontFamily: "var(--sans)" }}
@@ -304,7 +310,7 @@ export function RiskCalculator() {
             ))}
 
             {answered === factors.length && (
-              <RunBtn onClick={() => setSubmitted(true)} />
+              <RunBtn onClick={handleSubmit} />
             )}
           </div>
         </div>
