@@ -75,8 +75,8 @@ const contactItems = [
   {
     id: "whatsapp",
     label: "WHATSAPP",
-    value: "+92 339 008 9179",
-    href: "https://wa.me/923390089179",
+    value: "+44 7547 533562",
+    href: "https://wa.me/447547533562",
     icon: <IconWhatsApp />,
   },
 ];
